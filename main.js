@@ -56,64 +56,70 @@ const posts = [
     }
 ];
 
-
+// ContainerDom
 const container = document.getElementById('container');
+
+// Ciclo generazione Pagina 
 for (let i = 0; i < posts.length; i++) {
     let date = reverse(posts[i].created);
     let likes = posts[i].likes;
     let author = posts[i].author;
     let authName = author.name;
     let authImg = author.image;
+    container.innerHTML +=
+        `   <div class="post">
+                <div class="post__header">
+                    <div class="post-meta">
+                        <div class="post-meta__icon">
+                            <img class="profile-pic" src="${authImg}" alt="${authName}">
+                        </div>
+                        <div class="post-meta__data">
+                            <div class="post-meta__author">${authName}</div>
+                            <div class="post-meta__time">${date}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="post__text">${posts[i].content}</div>
+                <div class="post__image">
+                    <img src="${posts[i].media}" alt="Media ${i}">
+                </div>
+                <div class="post__footer">
+                    <div class="likes js-likes">
+                        <div class="likes__cta">
+                            <a id="test" class="like-button  js-like-button" href="#" data-postid="1">
+                                <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
+                                <span class="like-button__label">Mi Piace</span>
+                            </a>
+                        </div>
+                        <div class="likes__counter">
+                            Piace a <b id="like-counter-1" class="js-likes-counter">${likes}</b> persone
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `
     if (authImg == null) {
         authImg = getInitial(authName);
+        let postIcon = document.getElementsByClassName('post-meta__icon');
+        postIcon[i].innerHTML =
+            `   <div class="usrIn">
+                    ${authImg}
+                </div>
+        `;
     }
-    container.innerHTML +=
-`   <div class="post">
-        <div class="post__header">
-            <div class="post-meta">
-                <div class="post-meta__icon">
-                    <img class="profile-pic" src="${authImg}" alt="${authName}">
-                </div>
-                <div class="post-meta__data">
-                    <div class="post-meta__author">${authName}</div>
-                    <div class="post-meta__time">${date}</div>
-                </div>
-            </div>
-        </div>
-        <div class="post__text">${posts[i].content}</div>
-        <div class="post__image">
-            <img src="${posts[i].media}" alt="Media ${i}">
-        </div>
-        <div class="post__footer">
-            <div class="likes js-likes">
-                <div class="likes__cta">
-                    <a id="test" class="like-button  js-like-button" href="#" data-postid="1">
-                        <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
-                        <span class="like-button__label">Mi Piace</span>
-                    </a>
-                </div>
-                <div class="likes__counter">
-                    Piace a <b id="like-counter-1" class="js-likes-counter">${likes}</b> persone
-                </div>
-            </div>
-        </div>
-    </div>
-`
 };
 
 // Funzione Conversione formato ora
-function reverse(date) {
-    let singleLetters = date.split("-");
+function reverse(data) {
+    let singleLetters = data.split("-");
     let reverseLetters = singleLetters.reverse('');
     let joinLetters = reverseLetters.join("-");
     return joinLetters;
 }
-
-
-// Function Get Initial
-function getInitial(nameString) {
-    const fullName = nameString.split(' ');
-    const initials = fullName.shift().charAt(0) + fullName.pop().charAt(0);
+// Function Prendi iniziali
+function getInitial(nomeCompleto) {
+    const nomeDiviso = nomeCompleto.split(' ');
+    const initials = nomeDiviso.shift().charAt(0) + nomeDiviso.pop().charAt(0);
     return initials.toUpperCase();
 }
 
