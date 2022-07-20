@@ -59,8 +59,14 @@ const posts = [
 // ContainerDom
 const container = document.getElementById('container');
 
+
+
+// Array immagini piaciute
+const lPic = [];
+
 // Ciclo generazione Pagina 
 for (let i = 0; i < posts.length; i++) {
+    // Definizione key in variabili
     let date = reverse(posts[i].created);
     let likes = posts[i].likes;
     let author = posts[i].author;
@@ -108,6 +114,9 @@ for (let i = 0; i < posts.length; i++) {
         `;
     }
 };
+
+
+
 
 // Funzione Conversione formato ora
 function reverse(data) {
