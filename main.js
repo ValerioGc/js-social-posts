@@ -57,46 +57,63 @@ const posts = [
 ];
 
 
-
 const container = document.getElementById('container');
-
-for (let i = 0; i < posts.length - 1; i++) {
-    console.log(posts[i].id)
-    console.log(posts[i].media)
-    console.log(posts[i].content)
-    console.log(posts[i].likes)
-    console.log(posts[i].created)
+for (let i = 0; i < posts.length; i++) {
+    let date = reverse(posts[i].created);
+    let likes = posts[i].likes;
+    let author = posts[i].author;
+    let authName = author.name;
+    let authImg = author.image;
+    if (authImg == null) {
+        authImg = getInitial(authName);
+    }
     container.innerHTML +=
 `   <div class="post">
         <div class="post__header">
             <div class="post-meta">
                 <div class="post-meta__icon">
-                    <img class="profile-pic" src="https://unsplash.it/300/300?image=15" alt="Phil Mangione">
+                    <img class="profile-pic" src="${authImg}" alt="${authName}">
                 </div>
                 <div class="post-meta__data">
-                    <div class="post-meta__author">Phil Mangione</div>
-                    <div class="post-meta__time">4 mesi fa</div>
+                    <div class="post-meta__author">${authName}</div>
+                    <div class="post-meta__time">${date}</div>
                 </div>
             </div>
         </div>
-        <div class="post__text">Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.</div>
+        <div class="post__text">${posts[i].content}</div>
         <div class="post__image">
-            <img src="https://unsplash.it/600/300?image=171" alt="">
+            <img src="${posts[i].media}" alt="Media ${i}">
         </div>
         <div class="post__footer">
             <div class="likes js-likes">
                 <div class="likes__cta">
-                    <a class="like-button  js-like-button" href="#" data-postid="1">
+                    <a id="test" class="like-button  js-like-button" href="#" data-postid="1">
                         <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
                         <span class="like-button__label">Mi Piace</span>
                     </a>
                 </div>
                 <div class="likes__counter">
-                    Piace a <b id="like-counter-1" class="js-likes-counter">${posts[i].likes}</b> persone
+                    Piace a <b id="like-counter-1" class="js-likes-counter">${likes}</b> persone
                 </div>
             </div>
         </div>
     </div>
 `
+};
+
+// Funzione Conversione formato ora
+function reverse(date) {
+    let singleLetters = date.split("-");
+    let reverseLetters = singleLetters.reverse('');
+    let joinLetters = reverseLetters.join("-");
+    return joinLetters;
+}
+
+
+// Function Get Initial
+function getInitial(nameString) {
+    const fullName = nameString.split(' ');
+    const initials = fullName.shift().charAt(0) + fullName.pop().charAt(0);
+    return initials.toUpperCase();
 }
 
