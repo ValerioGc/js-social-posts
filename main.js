@@ -59,19 +59,24 @@ const posts = [
 // ContainerDom
 const container = document.getElementById('container');
 
-
-
 // Array immagini piaciute
 const lPic = [];
 
-// Ciclo generazione Pagina 
+// Bottone like e contatore
+const likesBTN = document.getElementsByClassName(`like-button`);
+const likesIN = document.getElementsByClassName('js-likes-counter')
+
+// Ciclo generazione Pagina
 for (let i = 0; i < posts.length; i++) {
-    // Definizione key in variabili
+// Definizione key in variabili
     let date = reverse(posts[i].created);
     let likes = posts[i].likes;
+    let id = posts[i].id;
     let author = posts[i].author;
+// Definizione key in array>obj in variabili
     let authName = author.name;
     let authImg = author.image;
+// Generazione Dinamica contenuti
     container.innerHTML +=
         `   <div class="post">
                 <div class="post__header">
@@ -92,18 +97,19 @@ for (let i = 0; i < posts.length; i++) {
                 <div class="post__footer">
                     <div class="likes js-likes">
                         <div class="likes__cta">
-                            <a id="test" class="like-button  js-like-button" href="#" data-postid="1">
+                            <a class="like-button js-like-button" href="#" data-postid="${id}">
                                 <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
                                 <span class="like-button__label">Mi Piace</span>
                             </a>
                         </div>
                         <div class="likes__counter">
-                            Piace a <b id="like-counter-1" class="js-likes-counter">${likes}</b> persone
+                            Piace a <b id="like-counter-${i + 1}" class="js-likes-counter">${likes}</b> persone
                         </div>
                     </div>
                 </div>
             </div>
         `
+// Controllo valore Immagine
     if (authImg == null) {
         authImg = getInitial(authName);
         let postIcon = document.getElementsByClassName('post-meta__icon');
@@ -113,11 +119,48 @@ for (let i = 0; i < posts.length; i++) {
                 </div>
         `;
     }
-};
-
-
-
-
+    
+// Controllo click bottone Mi piace
+    let contrLike = true;
+// Event listner bottoni
+    for (let x = 0; x < likesBTN.length; x++) {    
+        let idPost = likesBTN[x].getAttribute('data-postid');
+        likesBTN[x].addEventListener('click', 
+            function (event){
+                event.preventDefault();
+                if (contrLike == true) {
+                    likes++;
+                    console.log('like + =' + ' ' + likes);
+                    this.style.color = 'green';
+                // Reimposto controllo 
+                    contrLike = false;
+                } else {
+                    likes--;
+                    console.log('like -  =' + ' ' + likes);
+                    this.style.color = 'black';
+                // Reimposto controllo 
+                    contrLike = true;             
+                }
+                likesIN[x].innerHTML = likes;
+                // Funzione push/pop array
+                pushEl(lPic, idPost);
+                console.log(lPic);
+            }
+        );
+    }
+}
+/*
+    Funzioni 
+*/
+// Funzione creazione array post like
+function pushEl ( array, element) {
+    if (!array.includes(element)) {
+        array.push(element);
+    }else {
+        array.pop(element);
+    }
+    return array;
+}
 // Funzione Conversione formato ora
 function reverse(data) {
     let singleLetters = data.split("-");
@@ -131,4 +174,3 @@ function getInitial(nomeCompleto) {
     const initials = nomeDiviso.shift().charAt(0) + nomeDiviso.pop().charAt(0);
     return initials.toUpperCase();
 }
-
